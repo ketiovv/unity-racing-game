@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class FinishCheckpointTrigger : MonoBehaviour
@@ -16,8 +13,6 @@ public class FinishCheckpointTrigger : MonoBehaviour
     public GameObject BestLapMiliSeconds;
     public GameObject BestLapSeconds;
     public GameObject BestLapMinutes;
-
-    public GameObject LapTimeBox;
 
     void OnTriggerEnter()
     {
@@ -47,7 +42,6 @@ public class FinishCheckpointTrigger : MonoBehaviour
         //when milisecond is 9.6352 we get only 9
         var bestLapMiliSeconds = int.Parse(BestLapMiliSeconds.GetComponent<Text>().text.Substring(0, 1));
 
-
         if (bestLapMinutes == 0 && bestLapSeconds == 0 && bestLapMiliSeconds == 0)
         {
             UpdateBestLapTime();
@@ -74,10 +68,13 @@ public class FinishCheckpointTrigger : MonoBehaviour
 
             }
         }
+
+        // CLEAR TIME IN LAP TIME MANAGER
         LapTimeManager.MinuteCount = 0;
         LapTimeManager.SecondCount = 0;
         LapTimeManager.MiliSecondCount = 0;
 
+        // UPDATE TRIGGERS
         FinishCheckpointTrig.SetActive(false);
         Sector2CheckpointTrig.SetActive(true);
     }
@@ -104,4 +101,5 @@ public class FinishCheckpointTrigger : MonoBehaviour
 
         BestLapMiliSeconds.GetComponent<Text>().text = "" + LapTimeManager.MiliSecondCount;
     }
+
 }
