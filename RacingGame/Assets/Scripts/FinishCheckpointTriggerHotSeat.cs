@@ -15,16 +15,70 @@ public class FinishCheckpointTriggerHotSeat : MonoBehaviour
 
     void OnTriggerEnter()
     {
-        // UPDATE TRIGGERS
-        FinishCheckpointTrig.SetActive(false);
-        Sector2CheckpointTrig.SetActive(true);
-
         // SET BEST TIME OF CURRENT PLAYER
         var timeInTimeStamp = new TimeSpan(0, 0,
             LapTimeManager.MinuteCount,
             LapTimeManager.SecondCount,
             int.Parse(LapTimeManager.MiliSecondDisplay) * 100);
 
+        SetBestTimeOfCurrentPlayer(timeInTimeStamp);
+
+        // CLEAR TIME IN LAP TIME MANAGER
+        ClearTimeInLapTimeManager();
+
+        // STOP TIMER
+        LapTimer.SetActive(false);
+
+        // CHANGE PLAYER IF BETTER TIME
+        ChangeCurrentPlayerIfBetterTime(timeInTimeStamp);
+
+        // RESET CAR POSITION
+        ResetCarPosition();
+
+
+        // UPDATE TRIGGERS
+        FinishCheckpointTrig.SetActive(false);
+        Sector2CheckpointTrig.SetActive(true);
+
+        // START COUNTDOWN
+        var countdownScript = CountdownManager.GetComponent<Countdown>();
+        countdownScript.Counting();
+    }
+
+    bool CheckIfExistPlayerWithNoTime()
+    {
+        return HotSeatManager.AllPlayers.Any(player => player.BestTime == TimeSpan.Zero);
+    }
+
+    HotSeatManager.HotSeatPlayer GetPlayerWithNoTime() =>
+        HotSeatManager.AllPlayers.FirstOrDefault(player => player.BestTime == TimeSpan.Zero);
+
+    HotSeatManager.HotSeatPlayer GetPlayerWithWorstTime()
+    {
+        HotSeatManager.HotSeatPlayer playerWithWorstTime = null;
+
+        foreach (var player in HotSeatManager.AllPlayers)
+        {
+            if (playerWithWorstTime == null)
+            {
+                playerWithWorstTime = player;
+            }
+            else
+            {
+                if (playerWithWorstTime.BestTime < player.BestTime)
+                {
+                    playerWithWorstTime = player;
+                }
+            }
+        }
+
+        return playerWithWorstTime;
+    }
+
+
+
+    void SetBestTimeOfCurrentPlayer(TimeSpan timeInTimeStamp)
+    {
         if (HotSeatManager.CurrentPlayer.BestTime == TimeSpan.Zero)
         {
             HotSeatManager.CurrentPlayer.BestTime = timeInTimeStamp;
@@ -36,16 +90,17 @@ public class FinishCheckpointTriggerHotSeat : MonoBehaviour
                 HotSeatManager.CurrentPlayer.BestTime = timeInTimeStamp;
             }
         }
+    }
 
-        // CLEAR TIME IN LAP TIME MANAGER
+    void ClearTimeInLapTimeManager()
+    {
         LapTimeManager.MinuteCount = 0;
         LapTimeManager.SecondCount = 0;
         LapTimeManager.MiliSecondCount = 0;
+    }
 
-        // STOP TIMER
-        LapTimer.SetActive(false);
-
-        // CHANGE PLAYER IF BETTER TIME
+    void ChangeCurrentPlayerIfBetterTime(TimeSpan timeInTimeStamp)
+    {
         if (HotSeatManager.PlayerWithBestTime == null)
         {
             HotSeatManager.PlayerWithBestTime = HotSeatManager.CurrentPlayer;
@@ -80,9 +135,9 @@ public class FinishCheckpointTriggerHotSeat : MonoBehaviour
                 }
             }
         }
-
-        // RESET CAR POSITION
-
+    }
+    void ResetCarPosition()
+    {
         // remove motion - probably unnecessary becouse of isKinematic
         CarRigidbody.velocity = Vector3.zero;
         CarRigidbody.angularVelocity = Vector3.zero;
@@ -93,41 +148,5 @@ public class FinishCheckpointTriggerHotSeat : MonoBehaviour
         // set default postion and rotation
         CarRigidbody.position = new Vector3(265.07f, 0.1f, 418.27f);
         CarRigidbody.rotation = Quaternion.Euler(0f, 35.628f, 0f);
-
-
-        // start countdown
-        var countdownScript = CountdownManager.GetComponent<Countdown>().CountStart();
-        FinishCheckpointTrig.SetActive(true);
-        StartCoroutine(countdownScript);
-    }
-
-    bool CheckIfExistPlayerWithNoTime()
-    {
-        return HotSeatManager.AllPlayers.Any(player => player.BestTime == TimeSpan.Zero);
-    }
-
-    HotSeatManager.HotSeatPlayer GetPlayerWithNoTime() =>
-        HotSeatManager.AllPlayers.FirstOrDefault(player => player.BestTime == TimeSpan.Zero);
-
-    HotSeatManager.HotSeatPlayer GetPlayerWithWorstTime()
-    {
-        HotSeatManager.HotSeatPlayer playerWithWorstTime = null;
-
-        foreach (var player in HotSeatManager.AllPlayers)
-        {
-            if (playerWithWorstTime == null)
-            {
-                playerWithWorstTime = player;
-            }
-            else
-            {
-                if (playerWithWorstTime.BestTime < player.BestTime)
-                {
-                    playerWithWorstTime = player;
-                }
-            }
-        }
-
-        return playerWithWorstTime;
     }
 }
