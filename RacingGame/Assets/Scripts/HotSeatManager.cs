@@ -12,8 +12,7 @@ public class HotSeatManager : MonoBehaviour
         public TimeSpan BestTime { get; set; }
     }
 
-    public GameObject PlayerBox;
-    public GameObject PlayerTimeBox;
+    public GameObject CurrentPlayerName;
 
     public GameObject Player1Name;
     public GameObject Player1BestTime;
@@ -23,13 +22,19 @@ public class HotSeatManager : MonoBehaviour
     public GameObject Player2BestTime;
     public GameObject Player2Attempts;
 
-
+    public GameObject Player3Name;
+    public GameObject Player3BestTime;
+    public GameObject Player3Attempts;
 
     public static int AttemptsOnStart = 3;
+
     public static HotSeatPlayer CurrentPlayer;
+    public static HotSeatPlayer PlayerWithBestTime = null;
 
     public static HotSeatPlayer Player1;
     public static HotSeatPlayer Player2;
+    public static HotSeatPlayer Player3;
+
 
     public static List<HotSeatPlayer> AllPlayers = new List<HotSeatPlayer>();
 
@@ -52,19 +57,31 @@ public class HotSeatManager : MonoBehaviour
         };
         AllPlayers.Add(Player2);
 
+        Player3 = new HotSeatPlayer()
+        {
+            Name = "Martyna",
+            Attempts = AttemptsOnStart,
+            BestTime = TimeSpan.Zero
+        };
+        AllPlayers.Add(Player3);
+
         CurrentPlayer = Player1;
     }
 
     void Update()
     {
-        PlayerBox.GetComponent<Text>().text = CurrentPlayer.Name;
+        CurrentPlayerName.GetComponent<Text>().text = CurrentPlayer.Name;
 
         Player1Name.GetComponent<Text>().text = Player1.Name;
         Player1BestTime.GetComponent<Text>().text = Player1.BestTime.ToString().Substring(3);
-        Player1Attempts.GetComponent<Text>().text = CurrentPlayer.Attempts.ToString();
+        Player1Attempts.GetComponent<Text>().text = Player1.Attempts > -1 ? Player1.Attempts.ToString() : "eliminated";
 
         Player2Name.GetComponent<Text>().text = Player2.Name;
         Player2BestTime.GetComponent<Text>().text = Player2.BestTime.ToString().Substring(3);
-        Player2Attempts.GetComponent<Text>().text = CurrentPlayer.Attempts.ToString();
+        Player2Attempts.GetComponent<Text>().text = Player2.Attempts > -1 ? Player2.Attempts.ToString() : "eliminated";
+
+        Player3Name.GetComponent<Text>().text = Player3.Name;
+        Player3BestTime.GetComponent<Text>().text = Player3.BestTime.ToString().Substring(3);
+        Player3Attempts.GetComponent<Text>().text = Player3.Attempts > -1 ? Player3.Attempts.ToString() : "eliminated";
     }
 }

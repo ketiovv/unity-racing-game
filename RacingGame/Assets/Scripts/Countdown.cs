@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,15 +7,16 @@ public class Countdown : MonoBehaviour
     public GameObject CountDown;
     public GameObject LapTimer;
     public GameObject CarControls;
+    public GameObject FinishCheckpoint;
+    public Rigidbody CarRigidbody;
 
     void Start()
     {
         StartCoroutine(CountStart());
     }
 
-    IEnumerator CountStart()
+    public IEnumerator CountStart()
     {
-        // countdown //for loop?
         yield return new WaitForSeconds(0.5f);
         CountDown.GetComponent<Text>().text = "3";
         CountDown.SetActive(true);
@@ -32,6 +31,8 @@ public class Countdown : MonoBehaviour
         yield return new WaitForSeconds(1);
         CountDown.SetActive(false);
         LapTimer.SetActive(true);
+        FinishCheckpoint.SetActive(false);
+        CarRigidbody.isKinematic = false;
         CarControls.SetActive(true);
     }
 }
