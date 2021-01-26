@@ -19,7 +19,7 @@ public class FinishCheckpointTriggerHotSeat : MonoBehaviour
         var timeInTimeStamp = new TimeSpan(0, 0,
             LapTimeManager.MinuteCount,
             LapTimeManager.SecondCount,
-            int.Parse(LapTimeManager.MiliSecondDisplay) * 100);
+            (int)Math.Round(LapTimeManager.MiliSecondCount * 100));
 
         SetBestTimeOfCurrentPlayer(timeInTimeStamp);
 
@@ -91,14 +91,12 @@ public class FinishCheckpointTriggerHotSeat : MonoBehaviour
             }
         }
     }
-
     void ClearTimeInLapTimeManager()
     {
         LapTimeManager.MinuteCount = 0;
         LapTimeManager.SecondCount = 0;
         LapTimeManager.MiliSecondCount = 0;
     }
-
     void ChangeCurrentPlayerIfBetterTime(TimeSpan timeInTimeStamp)
     {
         if (HotSeatManager.PlayerWithBestTime == null)
@@ -138,10 +136,6 @@ public class FinishCheckpointTriggerHotSeat : MonoBehaviour
     }
     void ResetCarPosition()
     {
-        // remove motion - probably unnecessary becouse of isKinematic
-        CarRigidbody.velocity = Vector3.zero;
-        CarRigidbody.angularVelocity = Vector3.zero;
-
         // physics does not affects the rigidbody
         CarRigidbody.isKinematic = true;
 

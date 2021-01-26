@@ -6,7 +6,6 @@ public class Countdown : MonoBehaviour
 {
     public GameObject CountDown;
     public GameObject LapTimer;
-    public GameObject CarControls;
     public Rigidbody CarRigidbody;
 
     void Start()
@@ -40,6 +39,5 @@ public class Countdown : MonoBehaviour
         CountDown.SetActive(false);
         LapTimer.SetActive(true);
         CarRigidbody.isKinematic = false;
-        CarControls.SetActive(true);
     }
 }
