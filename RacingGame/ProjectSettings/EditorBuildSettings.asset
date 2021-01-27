@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Track_1_HotSeat.unity
     guid: e687b5a3b4d5f8b44954cb110792d47d
+  - enabled: 1
+    path: Assets/Scenes/WinnerScreen.unity
+    guid: 44089461a427ff548b123a70c3f59cc3
   m_configObjects: {}
