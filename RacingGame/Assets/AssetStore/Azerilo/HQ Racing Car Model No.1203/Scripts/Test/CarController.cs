@@ -15,6 +15,7 @@ public class CarController : MonoBehaviour
     public float maxTurn = 20f;
     public Transform CM;
     public Rigidbody rb;
+    public float breakStrength;
     void Start()
     {
         im = GetComponent<InputManager>();
@@ -24,11 +25,27 @@ public class CarController : MonoBehaviour
             rb.centerOfMass = CM.localPosition;
         }
     }
+
+    void Update()
+    {
+
+    }
+
     void FixedUpdate()
     {
         foreach (var wheel in throttleWheels)
         {
-            wheel.motorTorque = strenghtCoefficent * Time.deltaTime * im.throttle; 
+    
+            if (im.brake)
+            {
+                wheel.motorTorque = 0f;
+                wheel.brakeTorque = breakStrength * Time.deltaTime;
+            }
+            else
+            {
+                wheel.motorTorque = strenghtCoefficent * Time.deltaTime * im.throttle;
+                wheel.brakeTorque = 0f;
+            }
         }
 
         foreach (var wheel in steeringWheels)
@@ -41,5 +58,6 @@ public class CarController : MonoBehaviour
         {
             mesh.transform.Rotate(rb.velocity.magnitude * (transform.InverseTransformDirection(rb.velocity).z >=0 ? 1: -1) / (2 * Mathf.PI * 0.27f), 0f, 0f);
         }
+
     }
 }
