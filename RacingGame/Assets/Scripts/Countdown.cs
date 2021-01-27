@@ -20,7 +20,6 @@ public class Countdown : MonoBehaviour
 
     public IEnumerator CountStart()
     {
-        Debug.Log("counting..");
         yield return new WaitForSeconds(0.5f);
         CountDown.GetComponent<Text>().text = "3";
         CountDown.SetActive(true);

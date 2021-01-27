@@ -51,4 +51,11 @@ public class LapTimeManager : MonoBehaviour
             MinuteBox.GetComponent<Text>().text = "" + MinuteCount + ":";
         }
     }
+
+    public static void ResetTimer()
+    {
+        MiliSecondCount = 0;
+        SecondCount = 0;
+        MinuteCount = 0;
+    }
 }

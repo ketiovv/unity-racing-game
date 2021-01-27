@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FinishCheckpointTriggerHotSeat : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class FinishCheckpointTriggerHotSeat : MonoBehaviour
         SetBestTimeOfCurrentPlayer(timeInTimeStamp);
 
         // CLEAR TIME IN LAP TIME MANAGER
-        ClearTimeInLapTimeManager();
+        LapTimeManager.ResetTimer();
 
         // STOP TIMER
         LapTimer.SetActive(false);
@@ -43,6 +44,8 @@ public class FinishCheckpointTriggerHotSeat : MonoBehaviour
         // START COUNTDOWN
         var countdownScript = CountdownManager.GetComponent<Countdown>();
         countdownScript.Counting();
+        Debug.Log($"Best time: {HotSeatManager.PlayerWithBestTime.Name}");
+
     }
 
     bool CheckIfExistPlayerWithNoTime()
@@ -91,12 +94,6 @@ public class FinishCheckpointTriggerHotSeat : MonoBehaviour
             }
         }
     }
-    void ClearTimeInLapTimeManager()
-    {
-        LapTimeManager.MinuteCount = 0;
-        LapTimeManager.SecondCount = 0;
-        LapTimeManager.MiliSecondCount = 0;
-    }
     void ChangeCurrentPlayerIfBetterTime(TimeSpan timeInTimeStamp)
     {
         if (HotSeatManager.PlayerWithBestTime == null)
@@ -106,6 +103,10 @@ public class FinishCheckpointTriggerHotSeat : MonoBehaviour
         }
         else if (CheckIfExistPlayerWithNoTime())
         {
+            if (HotSeatManager.PlayerWithBestTime.BestTime > timeInTimeStamp)
+            {
+                HotSeatManager.PlayerWithBestTime = HotSeatManager.CurrentPlayer;
+            }
             HotSeatManager.CurrentPlayer = GetPlayerWithNoTime();
         }
         else
@@ -117,20 +118,23 @@ public class FinishCheckpointTriggerHotSeat : MonoBehaviour
             }
             else
             {
-                HotSeatManager.CurrentPlayer.Attempts--;
+                if (GetPlayerWithWorstTime() == HotSeatManager.CurrentPlayer)
+                {
+                    HotSeatManager.CurrentPlayer.Attempts--;
+                }
+
+                // ELIMINATE PLAYER WITH NO ATTEMPTS
                 if (HotSeatManager.CurrentPlayer.Attempts == -1)
                 {
-                    // ELIMINATE PLAYER WITH NO ATTEMPTS
                     HotSeatManager.AllPlayers.Remove(HotSeatManager.CurrentPlayer);
-                    if (HotSeatManager.AllPlayers.Count > 1)
+                    if (HotSeatManager.AllPlayers.Count == 1)
                     {
-                        HotSeatManager.CurrentPlayer = GetPlayerWithWorstTime();
-                    }
-                    else
-                    {
-                        // END OF THE GAME
+                        // IF ELIMINATE LAST ONE -> END THE GAME
+                        SceneManager.LoadScene(5);
                     }
                 }
+
+                HotSeatManager.CurrentPlayer = GetPlayerWithWorstTime();
             }
         }
     }
