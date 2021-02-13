@@ -7,10 +7,11 @@ public class MenuController : MonoBehaviour
     public Dropdown PlayersNumberDropdown;
     public Dropdown AttemptsNumberDropdown;
 
+    public void Settings() => SceneManager.LoadScene(6);
     public void PlayTimeTrial()
     {
         LapTimeManager.ResetTimer();
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(TrackChooseManager.CurrentTrack == Track.Asphalt ? 1 : 7);
     }
 
     public void About() => SceneManager.LoadScene(2);
