@@ -29,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Track2_TimeTrial.unity
     guid: cb310220b164b964fbc32fb7e73b2128
+  - enabled: 1
+    path: Assets/Scenes/Track2_HotSeat.unity
+    guid: 6d53d41feb5afa6429244e72168a77ec
   m_configObjects: {}
