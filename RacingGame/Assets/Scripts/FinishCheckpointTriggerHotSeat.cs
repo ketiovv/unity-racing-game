@@ -5,8 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class FinishCheckpointTriggerHotSeat : MonoBehaviour
 {
-    public GameObject Car;
-    public Rigidbody CarRigidbody;
+    private GameObject Cars;
+    private Rigidbody CarRigidbody;
+    public GameObject Car1;
+    public GameObject Car2;
 
     public GameObject LapTimer;
     public GameObject CountdownManager;
@@ -32,6 +34,18 @@ public class FinishCheckpointTriggerHotSeat : MonoBehaviour
 
         // CHANGE PLAYER IF BETTER TIME
         ChangeCurrentPlayerIfBetterTime(timeInTimeStamp);
+
+        if (CarChooseMenager.CurrentCar == Car.Sport)
+        {
+            CarRigidbody = Car1.GetComponent<Rigidbody>();
+            Car2.SetActive(false);
+        }
+        else
+        {
+            CarRigidbody = Car2.GetComponent<Rigidbody>();
+            Car1.SetActive(false);
+        }
+
 
         // RESET CAR POSITION
         ResetCarPosition();
